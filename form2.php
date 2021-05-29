@@ -42,7 +42,10 @@
 				$Id = $_POST['Id'];
 				$year = date("Y"); 
 			
-			//  mkdir("$year/$camp");
+				if (!file_exists("$year")) {
+					//   mkdir($year);
+				mkdir("$year");
+			}
 				if (!file_exists("$year/$camp")) {
                         //   mkdir($year);
 					mkdir("$year/$camp");
