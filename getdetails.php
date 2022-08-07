@@ -11,7 +11,20 @@
         session_destroy(); 
         header("location:index.php"); 
     } 
+    if(isset($_GET['year']))
+    {
+        if($_GET['year']>=2020 && $_GET['year']<=date("Y"))
+        {
+            $_SESSION['year']=$_GET['year'];
+        }
+        else
+        {
+            header("location: index.php");
+            exit;
+        }
+    }
 ?>
+
 <?php
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id = $_POST['Id'];
@@ -26,7 +39,7 @@
         $mothername = $_POST['motherName'];
         $motheroccupation = $_POST['motherOccupation'];
 
-        $year = date("Y"); 
+        $year = $_SESSION["year"];
 //      mkdir($year);
 //  mkdir("$year/$camp");
     if (!file_exists("$year/$camp")) {
@@ -44,8 +57,8 @@
         $fatheroccupation = $_POST['fatherOccupation'];
         $mothername = $_POST['motherName'];
         $motheroccupation = $_POST['motherOccupation'];
-        $year = date("Y");
-         $file_name=$name .'_'.$id.'.json';
+        $year = $_SESSION["year"];
+        $file_name=$name .'_'.$id.'.json';
         
         if(!file_exists("$year/$camp/$file_name"))
         {
@@ -121,14 +134,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <style>
+        #selectYear
+        {
+            margin-top:2%;
+            margin-left:80%;
+            /* margin-right:5%; */
+            width:15%;
+        }
+        </style>
 </head>
 <body>
     <?php require 'header2.html'?>
     <section id='sectionid'>
         <button  id='inpsubmit' name='submit' class="btn btn-dark" onclick='document.location="form2.php"'>Add New Student</button>
         <input type="text" class="btn btn-light" id="inpsearch" placeholder="SEARCH" /><br>
+        <div id="yearSelectDiv">
+            <select id="selectYear" name="enterYear" class="form-control"  required autocomplete="off"  onchange="OnSelectionChange(this.value)">
+            <option value='' disabled selected>Select Year</option>
+            <?php
+                $scan = scandir('./');
+                foreach($scan as $file) {
+                    if (!is_dir("php/$file")) {
+                        if($file>=2000)
+                        {
+                        ?>
+                        <option value="<?php echo $file?>"><?php echo $file?></option>
+                        <?php
+                        }
+                    }
+                }
+            ?>
+            </select>
+        </div>
         <div class="container-fluid">       
-            <h1>Student Details</h1>                 
+        <h1>Student Details</h1>                 
         <table id='tbltable' class="table table-bordered">
             <tr class="text-light">
                   <th class="tdId">Id</th>
@@ -146,7 +187,7 @@
                 <th>Delete</th>
             </tr>
             <?php
-           $year = date("Y");
+           $year = $_SESSION["year"];
            $file_name=$_SESSION["entercamp"];
            if($file_name!='All Camps')
            {
@@ -447,4 +488,11 @@
     </div>
     <?php require 'footer.html'?>
 </body>
+
+
+<script>
+    function OnSelectionChange(data) {
+        window.location.href="getdetails.php?year="+data;
+    }
+</script>
 </html>

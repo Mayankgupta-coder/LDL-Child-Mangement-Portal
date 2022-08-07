@@ -14,6 +14,7 @@
             $_SESSION['username'] = $username;
              $_SESSION["login_time_stamp"] = time();
             $_SESSION['entercamp'] = $entercamp;
+            $_SESSION['year']= date("Y");
             header("location: getdetails.php");
         }
         else
@@ -60,7 +61,7 @@
                                 <input type="text" name="username" placeholder="Enter Username" required autocomplete="off">
                                 <input type="password" name="password" placeholder="Enter Password" required autocomplete="off">
                                 <!-- <input type="text" name="entercamp" placeholder="Enter Camp" required autocomplete="off"> -->
-                                    <select id="selectcamp" name="entercamp" class="form-control" required autocomplete="off">
+                                <select id="selectcamp" name="entercamp" class="form-control" required autocomplete="off">
                                     <option>All Camps</option>
                                     <option>Samrat Chowk</option>
                                     <option>Sarvoday Nagar	</option>
